@@ -1,39 +1,40 @@
 "use client"
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import Image from 'next/image';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 import { IoMdHeartEmpty, IoMdHeart } from 'react-icons/io';
-import NavBar from '../../components/NavBar'
- 
-export default function ProductDetails() {
+import NavBar from '../../../../components/NavBar'
+import { getProducts} from '../../../firebase';
+export default function ProductDetails({params}) {
     const [quantity, setQuantity] = useState(1);
     const [favorite, setFavorite] = useState(false);
     const [selectedTab, setSelectedTab] = useState('description');
-
-    const product = {
-        name: "Premium Wireless Headphones",
-        price: 199.99,
-        rating: 4.5,
-        reviews: 128,
-        description: "Experience unparalleled sound quality with our Premium Wireless Headphones. Featuring advanced noise-cancellation technology and long-lasting battery life.",
-        features: [
-            "40mm dynamic drivers for deep, rich sound",
-            "Active Noise Cancellation for immersive listening",
-            "30-hour battery life",
-            "Comfortable over-ear design",
-            "Bluetooth 5.0 for seamless connectivity"
-        ],
-        specs: {
-            "Bluetooth Version": "5.0",
-            "Battery Life": "Up to 30 hours",
-            "Charging Time": "2 hours",
-            "Weight": "250g",
-            "Warranty": "2 years"
-        }
-    };
+    const [product,setProduct]=useState({});
+    const [loading,setLoading]=useState(true);
+    // const product = {
+    //     name: "Premium Wireless Headphones",
+    //     price: 199.99,
+    //     rating: 4.5,
+    //     reviews: 128,
+    //     description: "Experience unparalleled sound quality with our Premium Wireless Headphones. Featuring advanced noise-cancellation technology and long-lasting battery life.",
+    //     features: [
+    //         "40mm dynamic drivers for deep, rich sound",
+    //         "Active Noise Cancellation for immersive listening",
+    //         "30-hour battery life",
+    //         "Comfortable over-ear design",
+    //         "Bluetooth 5.0 for seamless connectivity"
+    //     ],
+    //     specs: {
+    //         "Bluetooth Version": "5.0",
+    //         "Battery Life": "Up to 30 hours",
+    //         "Charging Time": "2 hours",
+    //         "Weight": "250g",
+    //         "Warranty": "2 years"
+    //     }
+    // };
 
     const sliderSettings = {
         dots: true,
@@ -69,17 +70,55 @@ export default function ProductDetails() {
         }
         return stars;
     };
+function productById(allProducts,id){
+const product=[];
+    for(let i=0;i<allProducts.length;i++){
+        if(allProducts[i].id==id){
+            product.push(allProducts[i]);
+        }
+    }
+    return product[0]
+}
+useEffect(()=>{
 
-    return (
+    console.log('params : ')
+    console.log(params.productDetails)
+    console.log(params.products)
+
+    const fetchProducts = async () => {
+        try {
+        const allProducts = await getProducts();
+        const pro=productById(allProducts,params.productDetails);
+       
+        console.log(allProducts);
+        setProduct(pro)
+        console.log(product);
+        if(product){
+            setLoading(false);
+        }
+        } catch (error) {
+        console.error('Error fetching products:', error);
+        }
+    };
+    fetchProducts()
+    },[])
+    return (<>
+  
+        {loading?
+            <div className='w-full min-h-screen max-w-7xl mx-auto h-auto flex gap-4 flex-col justify-start items-center p-6 bg-[#101113] text-gray-200'>
+            <NavBar/>
+            <h1 className='text-3xl text-white font-bold text-center'>Loading...</h1>
+            </div>
+            :
         <div className='w-full min-h-screen max-w-7xl mx-auto h-auto flex gap-4 flex-col justify-start items-center p-6 bg-[#101113] text-gray-200'>
             <NavBar/>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
                 <div className='w-full min-h-full bg-[#1a1c1e] shadow-xl rounded-lg overflow-hidden'>
                     <Slider {...sliderSettings}>
-                        {[1, 2, 3, 4].map((item) => (
+                        {product.imageUrl.map((item) => (
                             <div key={item} className="relative aspect-square">
                                 <Image   
-                                    src={`https://picsum.photos/seed/${item}/800/800`}
+                                    src={item}
                                     alt={`Product image ${item}`}
                                     layout="fill"
                                     objectFit="cover"
@@ -136,13 +175,13 @@ export default function ProductDetails() {
                         
                     </div>
                     <button className='w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105'>
-                        Add to Cart
+                        اطلب
                     </button>
                 </div>
             </div>
             <div className="mt-12 w-full bg-[#1a1c1e] shadow-xl rounded-lg overflow-hidden">
                 <div className="flex border-b border-[#2a2c2e]">
-                    {['description', 'features', 'specifications'].map((tab) => (
+                    {['description'].map((tab) => (
                         <button
                             key={tab}
                             onClick={() => setSelectedTab(tab)}
@@ -182,5 +221,7 @@ export default function ProductDetails() {
                 {/* Add a grid or slider for related products here */}
             </div>
         </div>
+    }
+      </>
     )
 }

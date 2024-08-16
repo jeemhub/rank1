@@ -7,7 +7,7 @@ import {Input} from "@nextui-org/react";
 import {SearchIcon} from "./SearchIcon";
 import { useRouter } from 'next/navigation'
 import { getProducts} from '../../firebase';
-export default function App() {
+export default function App({params}) {
   const router = useRouter();
   const [products, setProducts] = useState([]);
 
@@ -48,12 +48,28 @@ export default function App() {
       price: "$12.20",
     },
   ];
-
+  function getProductsByCategory(categoy,products) {
+    var newArry=[];
+    console.log(products)
+    console.log(products[0].categories)
+    for(let i=0;i<products.length;i++){
+      for(let j=0;j<products[i].categories.length;j++){
+        if(products[i].categories[j]=== categoy){
+          newArry.push(products[i])
+        }
+      }
+    }
+    return newArry
+}
   useEffect(() => {
+    console.log(params.products)
     const fetchProducts = async () => {
       try {
-        const products = await getProducts();
-        setProducts(products);
+        const allProducts = await getProducts();
+        console.log(allProducts)
+       
+        setProducts(getProductsByCategory(params.products,allProducts));
+        console.log(products)
       } catch (error) {
         console.error('Error fetching products:', error);
       }
@@ -96,8 +112,11 @@ export default function App() {
       />
       </div>
     <div className="gap-2 grid grid-cols-1 bg-[#101113]  sm:grid-cols-2 md:grid-cols-4 p-8">
+      {console.log('products')}
+      {console.log(products)}
       {products.map((item, index) => (
-        <Card onClick={() => router.push('/productDetails')} shadow="sm" key={index} isPressable onPress={() => console.log("item pressed")}>
+
+        <Card onClick={() => router.push(`/categories/${params.products}/${item.id}`)} shadow="sm" key={index} isPressable onPress={() => console.log("item pressed")}>
           <CardBody className="overflow-visible p-0">
             <Image
               shadow="sm"

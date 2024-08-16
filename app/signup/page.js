@@ -33,7 +33,8 @@ export default function Home() {
                     name:name,
                     aura:0,
                     level:0,
-                    band:false
+                    ImageUrl:'https://th.bing.com/th/id/R.b1b463303db368fd76ad68356d1d4f0c?rik=lY2e9ubl6ESqZg&pid=ImgRaw&r=0',
+                    band:false,
                 })
             }
         }catch(err){

@@ -11,7 +11,7 @@ const adminPage = () => {
     const [level,setLevel]=useState(null);
     const [aura,setAura]=useState(null);
     const [userData,setUserData]=useState(null);
-
+    const [loading,setLoading]=useState(false)
     const handleEditButton=(userId)=>{
       for(let i=0;i<users.length;i++){
         if(users[i].id===userId){
@@ -23,9 +23,13 @@ const adminPage = () => {
      console.log(userData)
     }
     const handleBand= async (userId)=>{
+      setLoading(true);
+      var oldUsers=users;
       for(let i=0;i<users.length;i++){
         if(users[i].id===userId){
           var userx=users[i];
+          oldUsers[i].band=!oldUsers[i].band;
+          setUsers(oldUsers)
           setUserData(users[i]);
         }
       }
@@ -36,24 +40,36 @@ const adminPage = () => {
         await updateUser(userx.id,{
            ...userx,band:newBandState
          })
+
+        setLoading(false);
        }catch(err){
          console.log(err)
        }
-       window.location.reload();
+      // window.location.reload();
      }
     
     const handleEditLevelAndAuru= async ()=>{
       // console.log(userData);
       // console.log(level);
       // console.log(aura);
+      setLoading(true);
+      var oldUsers=users;
       try{
        await updateUser(userData.id,{
           ...userData,level,aura
         })
+        for(let i=0;i<oldUsers.length;i++){
+          if(oldUsers[i].id==userData.id){
+            oldUsers[i].level=level;
+            oldUsers[i].aura=aura;
+          }
+        }
+        setUsers(oldUsers);
+        setLoading(false);
       }catch(err){
         console.log(err)
       }
-      window.location.reload();
+      //window.location.reload();
     }
 
     // const users=[
@@ -104,8 +120,10 @@ const adminPage = () => {
   
   return (
     <div className='min-h-screen bg-[#101113] flex justify-start items-center flex-col px-16 py-8'> 
+
+    {(users.length != 0 && !loading) ?
             <table className='border-collapse border border-white w-full text-start' >
-              <caption class="caption-top my-4 text-xl">
+              <caption className="caption-top my-4 text-xl">
                   حسابات المستخدمين داخل الموقع
               </caption>
 
@@ -142,6 +160,11 @@ const adminPage = () => {
                   
               </tbody>
            </table>
+           :
+           <div className='flex flex-col justify-center items-center text-3xl text-white font-bold min-h-screen'>
+                  loading ...
+                  </div> 
+  }
 
            <Modal 
         backdrop="opaque" 

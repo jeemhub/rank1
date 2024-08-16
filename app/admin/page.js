@@ -2,12 +2,18 @@
 import { useEffect, useState } from 'react';
 import {Input ,Button} from "@nextui-org/react";
 import Link from "next/link";
-
+import { useRouter } from 'next/navigation';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from './authSlice';
 const adminPage = () => {
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const router =useRouter();
   const [email,setEmail]=useState('');
   const [password,setPassword]=useState('');
   function handleSignUp(){
-    
+    dispatch(login());
+    router.push('/admin/dashboard')
   }
   return (
     <div className='min-h-screen bg-[#101113] flex justify-center items-center flex-col'> 

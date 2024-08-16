@@ -67,16 +67,7 @@ export const getUsers = async () => {
   }
 };
 
-export const updateUser = async (userId, updatedData) => {
-  try {
-    const docRef = doc(db, 'Users', userId);
-    await updateDoc(docRef, updatedData);
-    console.log('Document updated with ID: ', userId);
-  } catch (error) {
-    console.error('Error updating document: ', error);
-    throw error;
-  }
-};
+
 
 export const getProductById = async (productId) => {
   try {
@@ -153,6 +144,31 @@ export const uploadImageCategories = async (file, categorieId) => {
     return downloadURL;
   } catch (error) {
     console.error('Error uploading image: ', error);
+    throw error;
+  }
+};
+export const uploadImageUser = async (file, userId) => {
+  try {
+    //Upload Image
+    const storageRef = ref(storage, `Users/${userId}/${file.name}`);
+    const snapshot = await uploadBytes(storageRef, file);
+    const downloadURL = await getDownloadURL(snapshot.ref);
+    //Update the user data
+    const docRef = doc(db, 'Users', userId);
+    await updateDoc(docRef, {ImageUrl:downloadURL});
+    return {ImageUrl:downloadURL}
+  } catch (error) {
+    console.error('Error uploading image: ', error);
+    throw error;
+  }
+};
+export const updateUser = async (userId, updatedData) => {
+  try {
+    const docRef = doc(db, 'Users', userId);
+    await updateDoc(docRef, updatedData);
+    console.log('Document updated with ID: ', userId);
+  } catch (error) {
+    console.error('Error updating document: ', error);
     throw error;
   }
 };

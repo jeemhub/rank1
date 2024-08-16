@@ -1,17 +1,40 @@
-import React from "react";
-import {Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link, Button} from "@nextui-org/react";
+'use client'
+import React, { useEffect } from "react";
+import {Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link, Button,Avatar} from "@nextui-org/react";
 import {AcmeLogo} from "./AcmeLogo.jsx";
 import { useRouter } from 'next/navigation'
+import { useSelector, useDispatch } from 'react-redux'
+import Cookies from 'js-cookie';
+import Image from 'next/image';
+
 export default function App() {
+  const userToolKit = useSelector((state) => state.user)
   const router = useRouter()
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-
+  const [user,setUser]=React.useState(null);
+const profile=()=>{
+  router.push('/profile')
+}
   const menuItems = [
-    "العالمية",
-    "حول الشركة",
-    "الفئات",
-    
+    {name:"العالمية",
+    href:'/rank'
+    },
+    {name:"حول الشركة",
+    href:'#'
+    },
+    {name:"الفئات",
+    href:'categories'
+    },
   ];
+  useEffect(()=>{
+    if(Cookies.get('user')){
+      const cookieValue = JSON.parse(Cookies.get('user'));
+      setUser(cookieValue);
+      console.log('cookies on navbar :');
+      console.log(user);
+      console.log(userToolKit);
+    }
+  },[])
 
   return (
     <Navbar className="z-50 bg-[#101113] text-white opacity-75 " onMenuOpenChange={setIsMenuOpen}>
@@ -21,14 +44,27 @@ export default function App() {
           className="sm:hidden "
         />
         <NavbarBrand>
-        <svg onClick={() => router.push('/')} className='cursor-pointer' fill="none" height="36" viewBox="0 0 32 32" width="36">
+
+        <Image
+        className='rounded-full mx-4'
+        src="/logo.png" // Path to the image in the public folder
+        alt="logo Image"
+        width={50} // Specify the width of the image
+        height={50} // Specify the height of the image
+      />
+
+        {/* <svg onClick={() => router.push('/')} className='cursor-pointer' fill="none" height="36" viewBox="0 0 32 32" width="36">
     <path
       clipRule="evenodd"
       d="M17.6482 10.1305L15.8785 7.02583L7.02979 22.5499H10.5278L17.6482 10.1305ZM19.8798 14.0457L18.11 17.1983L19.394 19.4511H16.8453L15.1056 22.5499H24.7272L19.8798 14.0457Z"
       fill="currentColor"
       fillRule="evenodd"
     />
-  </svg>
+  </svg> */}
+
+
+
+
           <p onClick={() => router.push('/')} className="font-bold text-inherit cursor-pointer">RANK STORE</p>
         </NavbarBrand>
       </NavbarContent>
@@ -45,11 +81,20 @@ export default function App() {
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link color="foreground" href="#" className='text-white'>
+          <Link color="foreground" href="/rank" className='text-white'>
             العالمية
           </Link>
         </NavbarItem>
       </NavbarContent>
+
+      {/* userToolKit.signIn */}
+        {user?
+        <NavbarContent justify="end">
+        <NavbarItem >
+          <Avatar onClick={profile} className='cursor-pointer' isBordered color="success" src={user.ImageUrl} />
+        </NavbarItem>
+        </NavbarContent>
+        : 
       <NavbarContent justify="end">
         <NavbarItem className="hidden lg:flex">
           <Link href="/signin" className='text-lg text-white'>تسجيل الدخول</Link>
@@ -60,16 +105,19 @@ export default function App() {
           </Button>
         </NavbarItem>
       </NavbarContent>
+    }
+
+
       <NavbarMenu className='bg-black text-white'>
         {menuItems.map((item, index) => (
-          <NavbarMenuItem className='gap-4' key={`${item}-${index}`}>
+          <NavbarMenuItem className='gap-16 pt-4' key={`${item}-${index}`}>
             <Link
               
-              className="w-full text-white text-lg"
-              href={item}
+              className="w-full text-white text-5xl"
+              href={item.href}
               size="lg"
             >
-              {item}
+              {item.name}
             </Link>
           </NavbarMenuItem>
         ))}

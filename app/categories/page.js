@@ -5,6 +5,8 @@ import { useState,useEffect  } from 'react';
 import NavBar from '@/components/NavBar'
 import { useRouter } from 'next/navigation'
 import {getCategories} from '../firebase'
+import Cookies from 'js-cookie';
+
 export default function CategoriesPage() {
   const [categories,setCategories]=useState([])
 
@@ -36,6 +38,9 @@ export default function CategoriesPage() {
   //   },
   //   // Add more categories as needed
   // ];
+  const handleClickCategory=(id)=>{
+    Cookies.set('category', id, { expires: 1 })
+  }
 
   useEffect(() => {
   
@@ -60,7 +65,7 @@ export default function CategoriesPage() {
       <div className="gap-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 p-8">
         {categories.map((category, index) => (
           <Card 
-            onClick={() => router.push('/categories/products')}
+            onClick={() => router.push(`/categories/${category.name}`)}
             key={index} 
             className="w-full h-[300px] col-span-1 group cursor-pointer overflow-hidden"
             isPressable

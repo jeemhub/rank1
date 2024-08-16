@@ -2,7 +2,7 @@
 import { useState,useEffect  } from 'react';
 import Image from 'next/image'
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Input, Textarea ,Select,SelectItem } from "@nextui-org/react";
-import { getProducts, addProduct, updateProduct, deleteProduct, uploadImage } from '../../../firebase';
+import { getProducts, addProduct, updateProduct, deleteProduct, uploadImage ,getCategories} from '../../../firebase';
 // import { useRouter } from 'next/router';
 import Link from "next/link";
 
@@ -14,10 +14,19 @@ export default function Products() {
   const [results, setResults] = useState([]);
   const [backdrop, setBackdrop] = useState('blur');
   const [image, setImage] = useState(null);
+
+  //******* */
   const [createObjectURL, setCreateObjectURL] = useState(null);
+
   const [selectedCategories, setSelectedCategories] = useState([]);
+
+  //******* */
   const [selectedFile, setSelectedFile] = useState(null);
-  const [productData, setProductData] = useState({ name: '', price: 0,number:0,description:"", imageUrl: '' });
+
+  //******* */
+  const [productData, setProductData] = useState({ name: '', price: 0,number:0,description:"", imageUrl: [] });
+  const [categories,setCategories]=useState([]);
+  const [loading,setLoading]=useState(false);
   const animals = [
     { key: 'cat', label: 'Cat' },
     { key: 'dog', label: 'Dog' },
@@ -45,26 +54,56 @@ export default function Products() {
   //   }
   //   window.location.reload();
   // };
+  const deletehandle=async (x)=>{
+    console.log(x);
+    setLoading(true)
+  try{
+    await deleteProduct(x);
+    var oldProducts=products;
+    var newProducts=[];
+    for(let i=0;i<oldProducts.length;i++){
+      if(oldProducts[i].id != x){
+        newProducts.push(oldProducts[i]);
+      }
+    }
+    setProducts(newProducts);
+    setLoading(false)
+  }catch(err){
+    console.log(err);
+  }
+  //window.location.reload();
+  }
   const handleAddProduct = async () => {
     handleSelectionChange();
+    setLoading(true)
     try {
       const productId = await addProduct(productData);
   
       if (selectedFile && selectedFile.length > 0) {
-        const uploadPromises = selectedFile.map(file =>
-          uploadImage(file, productId)
-        );
+        const uploadPromises = selectedFile.map(file =>uploadImage(file, productId));
         const imageUrls = await Promise.all(uploadPromises);
-  
-        await updateProduct(productId, { imageUrl: imageUrls });
-        setProductData({ ...productData, imageUrl: imageUrls });
+        console.log('imageUrls :')
+        console.log(imageUrls)
+        await updateProduct(productId, { imageUrl: imageUrls ,id:productId });
+        var newdata=productData;
+        newdata.imageUrl=imageUrls;
+        newdata.id=productId;
+
+        console.log('newdata')
+        console.log(newdata)
+        setProducts([...products,newdata]);
       }
-  
-      setProducts([...products, { id: productId, ...productData }]);
+      setCreateObjectURL(null);
+      setSelectedFile(null);
+      setProductData({ name: '', price: 0,number:0,description:"", imageUrl: [] });
+      console.log('final test')
+      console.log(products);
+      setLoading(false)
+      
     } catch (error) {
       console.error('Error adding product:', error);
     }
-    window.location.reload();
+    //window.location.reload();
   };
   
 
@@ -167,8 +206,20 @@ export default function Products() {
         console.error('Error fetching products:', error);
       }
     };
-
+    const fetchCategories = async () => {
+      try {
+        const categories = await getCategories();
+        setCategories(categories);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+    fetchCategories();
     fetchProducts();
+    console.log("categories : ")
+    console.log(categories)
+    console.log("products : ")
+    console.log(products)
   }, []);
 
   return (
@@ -191,7 +242,7 @@ export default function Products() {
                   placeholder="اكتب وصف المنتج"
                   className="max-w-s"
                 />
-                 <Input
+                 {/* <Input
                  value={productData.number}
                  onChange={(e) => setProductData({ ...productData, number: Number(e.target.value) })}
           type="number"
@@ -203,7 +254,7 @@ export default function Products() {
               <span className="text-default-400 text-small"></span>
             </div>
           }
-        />
+        /> */}
          <Input
          value={productData.price}
          onChange={(e) => setProductData({ ...productData, price: Number(e.target.value) })}
@@ -219,15 +270,15 @@ export default function Products() {
         />
         {/* add select here */}
         <Select
-                  label="Favorite Animal"
-                  placeholder="Select an animal"
+                  label="الفئة"
+                  placeholder="اختر الفئة"
                   selectionMode="multiple"
                   className="max-w-s text-black"
                   onSelectionChange={handleSelectionChange}
                 >
-                  {animals.map((animal) => (
-                    <SelectItem key={animal.key} className='text-black'>
-                      {animal.label}
+                  {categories?.map((category) => (
+                    <SelectItem key={category.name} className='text-black'>
+                      {category.name}
                     </SelectItem>
                   ))}
                 </Select>
@@ -296,9 +347,9 @@ export default function Products() {
           )}
         </ModalContent>
       </Modal>
-      <h1 className="font-bold text-3xl text-white">Product Page</h1>
+      <h1 className="font-bold text-3xl text-white">صفحة المنتجات</h1>
 
-      <div className="relative w-full max-w-md mb-2">
+      {/* <div className="relative w-full max-w-md mb-2">
         <input
           type="text"
           value={query}
@@ -313,37 +364,45 @@ export default function Products() {
         >
           Search
         </button>
-      </div>
+      </div> */}
 
       <button onClick={() => handleOpen("blur")} className='rounded-full bg-[#004226] p-2 px-24 text-xl'>
         اضافة منتج
       </button>
       <Link href='/admin/dashboard' className='text-2xl hover:font-bold duration-700 transition ease-in-out hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none'>الرجوع للوحة التحكم </Link>
+      {(products.length != 0 && !loading) ?
+        
+        <div className='grid md:grid-cols-4 grid-cols-1 gap-4 w-full md:px-16'>
+                    {products.map((product,index) => (
+                      <div key={index} className='flex flex-col w-full h-96 bg-white text-black rounded-xl overflow-hidden min-w-1/4'>
+                        <div className="h-48 relative">
+                          <Image
+                            src={product.imageUrl[0]}
+                            alt={product.title}
+                            layout="fill"
+                            objectFit="cover"
+                            className="rounded-t-xl"
+                          />
+                        </div>
+                        <div className='flex flex-col gap-2 text-black px-4 flex-grow'>
+                          <h1 className='text-xl font-bold'>{product.name}</h1>
+                          <p className='text-base opacity-75'>{product.description}</p>
+                        </div>
+                        <div className="p-4">
+                          <button onClick={()=>deletehandle(product.id)} className='w-full py-2 bg-red-600 text-xl text-white cursor-pointer rounded-md'>
+                            حذف
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+            :
 
-      <div className='grid md:grid-cols-4 grid-cols-2 gap-4 w-full md:px-16'>
-        {products.map((product,index) => (
-          <div key={index} className='flex flex-col w-full h-96 bg-white text-black rounded-xl overflow-hidden min-w-1/4'>
-            <div className="h-48 relative">
-              <Image
-                src={product.imageUrl[0]}
-                alt={product.title}
-                layout="fill"
-                objectFit="cover"
-                className="rounded-t-xl"
-              />
-            </div>
-            <div className='flex flex-col gap-2 text-black px-4 flex-grow'>
-              <h1 className='text-xl font-bold'>{product.name}</h1>
-              <p className='text-base opacity-75'>{product.description}</p>
-            </div>
-            <div className="p-4">
-              <button className='w-full py-2 bg-[#004226] text-xl text-white cursor-pointer rounded-md'>
-                التفاصيل
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
+        
+         <div className='flex flex-col justify-center items-center text-3xl text-white font-bold min-h-screen'>
+         loading ...
+         </div> 
+}
     </div>
   )
 }

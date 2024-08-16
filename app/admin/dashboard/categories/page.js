@@ -16,7 +16,7 @@ export default function categories (){
     const [categoryData,setCategoryData]=useState({});
     const [createObjectURL, setCreateObjectURL] = useState(null);
     const [categories,setCategories]=useState([])
-
+    const [loading,setLoading]=useState(false);
 //================ Input change ==========================
 
     const handleInputChange = (e) => {
@@ -26,6 +26,7 @@ export default function categories (){
 //================ handle Add Categores ==========================
 
 const handleAddCategory = async () => {
+  setLoading(true)
   try {
     const categorytId = await addCategories(categoryData);
 
@@ -42,10 +43,15 @@ const handleAddCategory = async () => {
     }
 
     setCategoryData([...categoryData, { id: categorytId, ...categoryData }]);
+
+    setCategoryData({});
+    setSelectedFile(null);
+    setCreateObjectURL(null)
   } catch (error) {
     console.error('Error adding product:', error);
   }
-  window.location.reload();
+  //window.location.reload();
+  setLoading(false)
 };
 
 
@@ -97,12 +103,22 @@ setCreateObjectURL(objectURLs);
 
 const handleDeleteCategory= async (x)=>{
   console.log(x);
+  setLoading(true)
   try{
     await deleteCategory(x);
+    var oldCategories=categories;
+    var newCategories=[];
+    for(let i=0;i<oldCategories.length;i++){
+      if(oldCategories[i].id != x){
+        newCategories.push(oldCategories[i]);
+      }
+    }
+    setCategories(newCategories);
+    setLoading(false)
   }catch(err){
     console.log(err);
   }
-  window.location.reload();
+ // window.location.reload();
 }
 
 //================ use Effect ===============================
@@ -130,7 +146,7 @@ useEffect(() => {
           <button onClick={() => handleOpen("blur")} className='rounded-full bg-[#004226] p-2 px-24 text-xl mb-8'>
         اضافة فئة
       </button>
-      <Link href='/admin/dashboard' className='text-2xl hover:font-bold duration-700 transition ease-in-out hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none'>الرجوع للوحة التحكم </Link>
+      <Link href='/admin/dashboard' className='text-2xl hover:font-bold duration-700 transition ease-in-out hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none mb-4'>الرجوع للوحة التحكم </Link>
 
           <Modal backdrop={backdrop} isOpen={isOpen} onClose={onClose}>
         <ModalContent>
@@ -248,7 +264,9 @@ useEffect(() => {
 */}
 
 {/* ===================== الفئات ================================= */}
-      <div className='grid md:grid-cols-4 grid-cols-2 gap-4 w-full md:px-16'>
+{
+  (categories.length != 0 && !loading) ?
+  <div className='grid md:grid-cols-4 grid-cols-1 gap-4 w-full md:px-16'>
         {categories && categories.map((category,index) => (
           <div key={index} className='flex flex-col w-full h-96 bg-white text-black rounded-xl overflow-hidden min-w-1/4 shadow-md hover:shadow-2xl hover:translate-y-2 duration-300 '>
             <div className="h-48 relative">
@@ -274,6 +292,12 @@ useEffect(() => {
           </div>
         ))}
       </div>
+  :
+  <div className='flex flex-col justify-center items-center text-3xl text-white font-bold min-h-screen'>
+         loading ...
+         </div> 
+}
+      
 {/* =====================  ===============================  ================================= */}
 
         
