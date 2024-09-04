@@ -80,7 +80,7 @@ export default function App({params}) {
   return (
     <div className='min-h-screen w-full  bg-[#101113] flex flex-col'>
         <NavBar/>
-        <div className='md:px-24 px-8 mt-4 mx-w-2/4'>
+        {/* <div className='md:px-24 px-8 mt-4 mx-w-2/4'>
         <Input
         label="Search"
         isClearable
@@ -110,7 +110,7 @@ export default function App({params}) {
           <SearchIcon className="text-black/50 mb-0.5 dark:text-white/90 text-slate-400 pointer-events-none flex-shrink-0" />
         }
       />
-      </div>
+      </div> */}
     <div className="gap-2 grid grid-cols-1 bg-[#101113]  sm:grid-cols-2 md:grid-cols-4 p-8">
       {console.log('products')}
       {console.log(products)}

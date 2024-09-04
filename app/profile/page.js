@@ -2,19 +2,23 @@
 
 import { useEffect, useState } from 'react';
 import { Button, Input, Spacer } from '@nextui-org/react';
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@nextui-org/react";
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure ,Spinner} from "@nextui-org/react";
 import Image from 'next/image';
 import NavBar from '@/components/NavBar';
 import { GrFormEdit, GrAchievement, GrAed } from "react-icons/gr";
 import { FaCamera } from 'react-icons/fa';
 import { uploadImageUser, updateUser } from '../firebase';
 import Cookies from 'js-cookie';
+import { auth } from '../firebase.config';
+import { useRouter } from 'next/navigation'
 
 export default function Profile() {
+  const router = useRouter()
+
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [newName, setNewName] = useState('');
   const [user, setUser] = useState(null);
-
+  const [loading,setLoading]=useState(false)
   useEffect(() => {
     const cookieUser = Cookies.get('user');
     if (cookieUser) {
@@ -30,9 +34,23 @@ export default function Profile() {
       setNewName('');
     }
   };
-
+  const logout = async ()=>{
+    try {
+      // Sign out the user
+      await auth.signOut();
+  
+      // Delete the 'user' cookie
+      Cookies.remove('user');
+      console.log('User logged out and cookie deleted.');
+      router.push('/')
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
+  };
+  
   const handleImageChange = async (event) => {
     const file = event.target.files[0];
+    setLoading(true)
     if (file && user) {
       try {
         const result = await uploadImageUser(file, user.id);
@@ -40,6 +58,7 @@ export default function Profile() {
         setUser(updatedUser);
         Cookies.set('user', JSON.stringify(updatedUser), { expires: 7 });
         updateUser(user.id, { ImageUrl: result.ImageUrl });
+        setLoading(false)
       } catch (error) {
         console.error('Error uploading image: ', error);
       }
@@ -49,7 +68,17 @@ export default function Profile() {
   if (!user) {
     return <div>Loading...</div>;
   }
+  if (loading) {
+    return (
+      <>
+      <NavBar />
+      <div className="min-h-screen bg-[#101113] flex fle-col justify-center items-center text-white">
+         <Spinner label="Loading" color="success" labelColor="success"/>
 
+      </div>
+      </>
+      )
+  }
   return (
     <>
       <NavBar />
@@ -94,7 +123,9 @@ export default function Profile() {
                   <h1 className="text-sm text-gray-700">Aura: {user?.aura}</h1>
                 </div>
               </div>
+              <button onClick={logout} className='bg-red-700 p-2 px-8 mt-8 rounded-md text-white font-bold text-xl'>Log out </button>
             </div>
+
           </div>
         </div>
 

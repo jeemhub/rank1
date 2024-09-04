@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react';
 import Link from "next/link";
-import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button} from "@nextui-org/react";
+import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button ,Spinner} from "@nextui-org/react";
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure} from "@nextui-org/react";
 import {getUsers,updateUser} from '../../../firebase'
 const adminPage = () => {
@@ -107,6 +107,7 @@ const adminPage = () => {
     useEffect(() => {
 
       const fetchaccounts = async () => {
+
         try {
           const users = await getUsers();
           setUsers(users);
@@ -162,7 +163,8 @@ const adminPage = () => {
            </table>
            :
            <div className='flex flex-col justify-center items-center text-3xl text-white font-bold min-h-screen'>
-                  loading ...
+                             <Spinner label="Loading" color="success" labelColor="success"/>
+
                   </div> 
   }
 

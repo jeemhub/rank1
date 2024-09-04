@@ -23,7 +23,7 @@ const profile=()=>{
     href:'#'
     },
     {name:"الفئات",
-    href:'categories'
+    href:'/categories'
     },
   ];
   useEffect(()=>{
@@ -88,9 +88,15 @@ const profile=()=>{
       </NavbarContent>
 
       {/* userToolKit.signIn */}
+        { console.log("navbar user ... .. .")}
+        { console.log(user)}
         {user?
         <NavbarContent justify="end">
-        <NavbarItem >
+        <NavbarItem>
+          {/* {
+            user.band?<>true</>:<>false</>
+          } */}
+          {/* <h1>{user.band}</h1> */}
           <Avatar onClick={profile} className='cursor-pointer' isBordered color="success" src={user.ImageUrl} />
         </NavbarItem>
         </NavbarContent>

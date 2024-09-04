@@ -1,5 +1,5 @@
 'use client';
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Input, Textarea ,Select,SelectItem } from "@nextui-org/react";
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Input, Textarea ,Select,SelectItem,Spinner } from "@nextui-org/react";
 import { useState,useEffect  } from 'react';
 import Image from 'next/image'
 import {addCategories , uploadImageCategories ,updateCategory,getCategories ,deleteCategory} from "../../../firebase"
@@ -294,7 +294,7 @@ useEffect(() => {
       </div>
   :
   <div className='flex flex-col justify-center items-center text-3xl text-white font-bold min-h-screen'>
-         loading ...
+                    <Spinner label="Loading" color="success" labelColor="success"/>
          </div> 
 }
       

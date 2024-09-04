@@ -3,7 +3,9 @@ import {useState,useEffect} from 'react'
 import NavBar from '@/components/NavBar'
 import Link from 'next/link';
 import {getUsers} from '@/app/firebase'
-import {Avatar} from "@nextui-org/react";
+import {Avatar ,Spinner} from "@nextui-org/react";
+import { GrAchievement } from "react-icons/gr";
+
 export default function (){
     const [users,setUsers]=useState([]);
     const sortByLevel = (usersArray) => {
@@ -30,11 +32,13 @@ export default function (){
         <>
         <NavBar/>
         <div className='min-h-screen flex flex-col justify-start items-center bg-[#101113] text-white gap-6 md:px-24 px-8 mt-8'>
+        <GrAchievement className='text-9xl w-64 text-white' />
+
             <h1 className='font-bold text-3xl my-2'>
                 تصنيف الحسابات من حيث المستوى
             </h1>
             {users.length != 0?
-            <div className='flex flex-col gap-2 justify-start items-center w-3/4'>
+            <div className='flex flex-col gap-2 justify-start items-center w-full'>
                 {
                     users.map((user)=>{
                         return(
@@ -55,7 +59,9 @@ export default function (){
                 }
             </div>
         :
-        <div className='text-white text-2xl text-center'>Loading ...</div>
+        <div className='h-screen w-full flex flex-col justify-center items-center'>
+        <Spinner label="Loading" color="success" labelColor="success"/>
+       </div>
         }
         </div>
         </>

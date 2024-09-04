@@ -1,7 +1,7 @@
 'use client';
 import { useState,useEffect  } from 'react';
 import Image from 'next/image'
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Input, Textarea ,Select,SelectItem } from "@nextui-org/react";
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Input, Textarea ,Select,SelectItem ,Spinner} from "@nextui-org/react";
 import { getProducts, addProduct, updateProduct, deleteProduct, uploadImage ,getCategories} from '../../../firebase';
 // import { useRouter } from 'next/router';
 import Link from "next/link";
@@ -14,7 +14,7 @@ export default function Products() {
   const [results, setResults] = useState([]);
   const [backdrop, setBackdrop] = useState('blur');
   const [image, setImage] = useState(null);
-
+  const [btnState,setBtnState]=useState({state:false,id:''});
   //******* */
   const [createObjectURL, setCreateObjectURL] = useState(null);
 
@@ -27,33 +27,41 @@ export default function Products() {
   const [productData, setProductData] = useState({ name: '', price: 0,number:0,description:"", imageUrl: [] });
   const [categories,setCategories]=useState([]);
   const [loading,setLoading]=useState(false);
-  const animals = [
-    { key: 'cat', label: 'Cat' },
-    { key: 'dog', label: 'Dog' },
-    { key: 'rabbit', label: 'Rabbit' },
-    { key: 'hamster', label: 'Hamster' },
-    // Add more animals as needed
-  ];
   const handleInputChange = (e) => {
     setQuery(e.target.value);
   };
 
+  const addRelatedHandle =async (productId)=>{
+    setBtnState({state:true,id:productId})
+    try{        
+      for(let i=0;i<products.length;i++){
+        if(products[i].id==productId){
+          products[i].related=true;
+        }
+      }
+      await updateProduct(productId,{related:true})
+    } catch(err){
+      console.log(err)
+      setBtnState(false)
+    }  
+    setBtnState({state:false,id:''})     
+  }
 
-  // const handleAddProduct = async () => {
-  //   handleSelectionChange();
-  //   try {
-  //     const productId = await addProduct(productData);
-  //     if (selectedFile && selectedFile.length > 0) {
-  //       const imageUrl = await uploadImage(selectedFile, productId);
-  //       await updateProduct(productId, { imageUrl });
-  //       setProductData({ ...productData, imageUrl });
-  //     }
-  //     setProducts([...products, { id: productId, ...productData }]);
-  //   } catch (error) {
-  //     console.error('Error adding product:', error);
-  //   }
-  //   window.location.reload();
-  // };
+  const deleteRelatedHandle =async (productId)=>{
+    setBtnState({state:true,id:productId})
+    try{
+      for(let i=0;i<products.length;i++){
+        if(products[i].id==productId){
+          products[i].related=false;
+        }
+      }
+      await updateProduct(productId,{related:false})
+    } catch(err){
+      console.log(err)
+      setBtnState(false)
+    }
+    setBtnState({state:false,id:''})      
+  }
   const deletehandle=async (x)=>{
     console.log(x);
     setLoading(true)
@@ -388,10 +396,37 @@ export default function Products() {
                           <h1 className='text-xl font-bold'>{product.name}</h1>
                           <p className='text-base opacity-75'>{product.description}</p>
                         </div>
-                        <div className="p-4">
-                          <button onClick={()=>deletehandle(product.id)} className='w-full py-2 bg-red-600 text-xl text-white cursor-pointer rounded-md'>
+                        <div className="p-4 flex flex-col">
+                          <button onClick={()=>deletehandle(product.id)} className='w-full py-2 bg-red-700 text-xl text-white cursor-pointer rounded-md'>
                             حذف
                           </button>
+                          {
+                            product.related?
+                            <>
+                            {(product.id === btnState.id && btnState.state)?
+                              <Button color="default">
+                              <Spinner label="" color="Success" labelColor="Success"/>
+                              </Button>
+                              :
+                              <button onClick={()=>deleteRelatedHandle(product.id)} className=' mt-2 w-full py-2 bg-red-700 text-xl text-white cursor-pointer rounded-md'>
+                            ازالة من المنتجات الاكثر مبيعا
+                          </button> 
+                          }
+                            </>
+
+                            :
+                            <>
+                            {(product.id === btnState.id && btnState.state)?
+                              <Button color="default">
+                              <Spinner label="" color="Success" labelColor="Success"/>
+                              </Button>
+                              :
+                          <button onClick={()=>addRelatedHandle(product.id)} className=' mt-2 w-full py-2 bg-green-700 text-xl text-white cursor-pointer rounded-md'>
+                            اضافة للمنتجات الاكثر مبيعا
+                          </button>
+                          }
+                            </>
+                          }
                         </div>
                       </div>
                     ))}
@@ -400,7 +435,8 @@ export default function Products() {
 
         
          <div className='flex flex-col justify-center items-center text-3xl text-white font-bold min-h-screen'>
-         loading ...
+                   <Spinner label="Loading" color="success" labelColor="success"/>
+
          </div> 
 }
     </div>

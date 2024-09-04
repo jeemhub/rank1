@@ -3,17 +3,24 @@ import { useState,useEffect } from 'react';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-import Image from 'next/image';
+import {Card, CardBody, CardFooter,Image} from "@nextui-org/react";
+//import Image from 'next/image';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 import { IoMdHeartEmpty, IoMdHeart } from 'react-icons/io';
 import NavBar from '../../../../components/NavBar'
 import { getProducts} from '../../../firebase';
+import { useRouter } from 'next/navigation'
+
 export default function ProductDetails({params}) {
+    const router = useRouter();
+
     const [quantity, setQuantity] = useState(1);
     const [favorite, setFavorite] = useState(false);
     const [selectedTab, setSelectedTab] = useState('description');
     const [product,setProduct]=useState({});
     const [loading,setLoading]=useState(true);
+    const [products, setProducts] = useState([]);
+    const [relatedProducts,setRelatedProduct]=useState([]);
     // const product = {
     //     name: "Premium Wireless Headphones",
     //     price: 199.99,
@@ -56,6 +63,20 @@ export default function ProductDetails({params}) {
             }
         ]
     };
+    const settings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 4,
+        slidesToScroll: 3
+      };
+    const settings2 = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 3,
+        slidesToScroll: 3
+      };
 
     const renderStars = (rating) => {
         const stars = [];
@@ -88,8 +109,15 @@ useEffect(()=>{
     const fetchProducts = async () => {
         try {
         const allProducts = await getProducts();
+        var related=[];
+        for(let i=0;i<allProducts.length;i++){
+            if(allProducts[i].related){
+                related.push(allProducts[i]);
+            }
+        }
+        setRelatedProduct(related);
         const pro=productById(allProducts,params.productDetails);
-       
+        setProducts(allProducts);
         console.log(allProducts);
         setProduct(pro)
         console.log(product);
@@ -217,7 +245,58 @@ useEffect(()=>{
                 </div>
             </div>
             <div className="mt-12 w-full">
-                <h2 className="text-2xl font-semibold mb-4 text-gray-100">Related Products</h2>
+                <h2 className="text-2xl font-semibold mb-4 text-gray-100 w-full text-center">المنتجات الاكثر مبيعا</h2>
+
+                <div className="slider-container md:block hidden">
+                <Slider {...settings}>
+                {relatedProducts.map((item, index) =>(
+                            <div className=''>
+                             <Card onClick={() => router.push(`/categories/${params.products}/${item.id}`)} shadow="sm" key={index} isPressable onPress={() => console.log("item pressed")}>
+                             <CardBody className="overflow-visible p-0">
+                                 <Image
+                                 shadow="sm"
+                                 radius="lg"
+                                 width={200}
+                                 height={100}
+                                 alt={item.name}
+                                 className="w-full object-cover h-[140px] w-[200px]"
+                                 src={item.imageUrl[0]}
+                                 />
+                             </CardBody>
+                             <CardFooter className="text-small justify-between">
+                                 <b>{item.name}</b>
+                                 <p className="text-default-500">{item.price}$</p>
+                             </CardFooter>
+                             </Card>
+                            </div>
+                        ))}
+               </Slider>
+               </div>
+
+               <div className="slider-container md:hidden block">
+                <Slider {...settings2}>
+                    {relatedProducts.map((item, index) => (
+                        <div className='p-2'>
+                        <Card className='min-h-[250px]' onClick={() => router.push(`/categories/${params.products}/${item.id}`)} shadow="sm" key={index} isPressable onPress={() => console.log("item pressed")}>
+                        <CardBody className="overflow-visible p-0">
+                            <Image
+                            shadow="sm"
+                            radius="md"
+                            width='100%'
+                            alt={item.name}
+                            className="w-full object-cover h-[140px]"
+                            src={item.imageUrl[0]}
+                            />
+                        </CardBody>
+                        <CardFooter className="text-small justify-between">
+                            <b>{item.name}</b>
+                            <p className="text-default-500">{item.price}$</p>
+                        </CardFooter>
+                        </Card>
+                        </div>
+                        ))}
+                </Slider>
+               </div>
                 {/* Add a grid or slider for related products here */}
             </div>
         </div>
