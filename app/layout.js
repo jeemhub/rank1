@@ -1,7 +1,7 @@
 'use client'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import Header from '@/components/Header';
+//import Header from '@/components/Header';
 import { NextUIProvider } from '@nextui-org/react'
 import { ToastContainer, toast } from 'react-toastify';
 import { store } from './store'
