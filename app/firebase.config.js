@@ -1,8 +1,7 @@
 // firebase.config.js
-import { initializeApp } from 'firebase/app';
+import { initializeApp, getApps } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
-import { getAnalytics } from "firebase/analytics";
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
@@ -15,8 +14,23 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
-export const storage = getStorage(app);
-export const auth = getAuth(app);
-const analytics = getAnalytics(app);
+let app;
+let db;
+let storage;
+let auth;
+let analytics;
+
+if (typeof window !== 'undefined' && !getApps().length) {
+  app = initializeApp(firebaseConfig);
+  db = getFirestore(app);
+  storage = getStorage(app);
+  auth = getAuth(app);
+  
+  // Only initialize analytics on the client-side
+  if (process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID) {
+    const { getAnalytics } = require("firebase/analytics");
+    analytics = getAnalytics(app);
+  }
+}
+
+export { app, db, storage, auth, analytics };
