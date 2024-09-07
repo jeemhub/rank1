@@ -45,13 +45,9 @@ const adminPage = () => {
        }catch(err){
          console.log(err)
        }
-      // window.location.reload();
      }
     
     const handleEditLevelAndAuru= async ()=>{
-      // console.log(userData);
-      // console.log(level);
-      // console.log(aura);
       setLoading(true);
       var oldUsers=users;
       try{
@@ -69,41 +65,7 @@ const adminPage = () => {
       }catch(err){
         console.log(err)
       }
-      //window.location.reload();
     }
-
-    // const users=[
-    //     {
-    //         id:1,
-    //         name:"jassim",
-    //         level:12,
-    //         aura:3
-    //     },
-    //     {
-    //         id:2,
-    //         name:"mohammed",
-    //         level:15,
-    //         aura:22
-    //     },
-    //     {
-    //         id:3,
-    //         name:"ali",
-    //         level:1,
-    //         aura:5
-    //     },
-    //     {
-    //         id:4,
-    //         name:"abd",
-    //         level:2,
-    //         aura:3
-    //     },
-    //     {
-    //         id:5,
-    //         name:"ahmed",
-    //         level:25,
-    //         aura:67
-    //     }
-    // ]
     useEffect(() => {
 
       const fetchaccounts = async () => {

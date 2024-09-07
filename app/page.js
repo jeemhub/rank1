@@ -19,24 +19,7 @@ const products=()=>{
   return (
     <>
         <NavBar/>
-     {/* <div className='md:hidden z-20'>
-          <Headers />
-        </div> */}
       <div className="w-full h-screen hidden md:block">
-        {/* Navigation Bar */}
-        {/* <nav className="absolute top-0 left-0 w-full flex justify-between items-center p-10 bg-black bg-opacity-0 text-white z-10">
-          <div className="text-xl font-bold">MyLogo</div>
-          <div className="flex space-x-4 gap-12">
-            <Link href="#link1" className="text-white no-underline text-2xl hover:text-shadow-white transition duration-500 ease-in-out">المنتجات</Link>
-            <Link href="#link2" className="text-white no-underline text-2xl hover:text-shadow-white transition duration-500 ease-in-out">العالمية</Link>
-            <Link href="#link3" className="text-white no-underline text-2xl hover:text-shadow-white transition duration-500 ease-in-out">حول الشركة</Link>
-            <Link href="#link4" className="text-white no-underline text-2xl hover:text-shadow-white transition duration-500 ease-in-out">حسابك</Link>
-          </div>
-          <button className="bg-[#004226] text-white rounded-full border-none py-2 px-8 cursor-pointer text-2xl hover:shadow-lg hover:shadow-[#004226] transition duration-300 ease-in-out">
-            سجل الدخول
-          </button>
-        </nav> */}
-
         {/* Background Image */}
         <Image
           src={profilePic}
