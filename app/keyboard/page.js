@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Modal, Button, Grid } from '@nextui-org/react';
 
 export default function KeyboardPage() {
@@ -17,7 +17,14 @@ export default function KeyboardPage() {
     setVisible(false);
     setCurrentKey(null);
   };
-
+useEffect(()=>{
+  if (typeof window !== "undefined") {
+    // This code will only run on the client side
+    const cookiesUser = JSON.parse(Cookies.get('user'));
+    console.log('User from cookies:', cookiesUser);
+    setUser(cookiesUser);
+  }
+},[])
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
       <div className="grid grid-cols-3 gap-4">

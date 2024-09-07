@@ -3,7 +3,7 @@ import {Input ,Button,Spinner} from "@nextui-org/react";
 import { auth ,db } from "../firebase.config";
 import { setDoc,doc,addDoc ,collection} from "firebase/firestore";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import {getUsers} from '@/app/firebase'
@@ -112,6 +112,14 @@ export default function Home() {
           </div>
         )
       }
+      useEffect(()=>{
+        if (typeof window !== "undefined") {
+          // This code will only run on the client side
+          const cookiesUser = JSON.parse(Cookies.get('user'));
+          console.log('User from cookies:', cookiesUser);
+          setUser(cookiesUser);
+        }
+      },[])
   return (
    <div className='min-h-screen bg-[#101113] flex justify-center items-center flex-col'> 
     <div className='min-w-4/5 w-3/5 p-4 rounded-md flex flex-col justify-start items-center bg-white h-auto m-4 gap-4'>

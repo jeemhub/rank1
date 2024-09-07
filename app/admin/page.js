@@ -11,6 +11,14 @@ import { auth ,db } from "@/app/firebase.config";
 import Cookies from 'js-cookie';
 
 const adminPage = () => {
+  useEffect(()=>{
+    if (typeof window !== "undefined") {
+      // This code will only run on the client side
+      const cookiesUser = JSON.parse(Cookies.get('user'));
+      console.log('User from cookies:', cookiesUser);
+      setUser(cookiesUser);
+    }
+  },[])
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const router =useRouter();

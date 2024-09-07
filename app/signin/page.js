@@ -122,6 +122,12 @@ export default function Home() {
         }
     }
     useEffect(() => {
+      if (typeof window !== "undefined") {
+        // This code will only run on the client side
+        const cookiesUser = JSON.parse(Cookies.get('user'));
+        console.log('User from cookies:', cookiesUser);
+        setUser(cookiesUser);
+      }
         console.log('Updated profile:', profile);
         dispatch(signIn(profile))
         if(Cookies.get('user')){

@@ -20,6 +20,12 @@ export default function Profile() {
   const [user, setUser] = useState(null);
   const [loading,setLoading]=useState(false)
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      // This code will only run on the client side
+      const cookiesUser = JSON.parse(Cookies.get('user'));
+      console.log('User from cookies:', cookiesUser);
+      setUser(cookiesUser);
+    }
     const cookieUser = Cookies.get('user');
     if (cookieUser) {
       setUser(JSON.parse(cookieUser));
