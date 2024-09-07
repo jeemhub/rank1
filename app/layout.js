@@ -2,7 +2,7 @@
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { NextUIProvider } from '@nextui-org/react'
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer} from 'react-toastify';
 import { store } from './store'
 import { Provider } from 'react-redux'
 const inter = Inter({ subsets: ['latin'] })
