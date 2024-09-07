@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import {signIn} from './signin/userSlice'
 import { useRouter } from 'next/navigation';
 import { useEffect } from "react";
-
+import Cookies from 'js-cookie';
 export default function Home() {
   const userToolKit = useSelector((state) => state.user);
   const router =useRouter();
