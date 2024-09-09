@@ -118,7 +118,6 @@ useEffect(()=>{
             </div>
             :
         <div className='w-full min-h-screen max-w-7xl mx-auto h-auto flex gap-4 flex-col justify-start items-center p-6 bg-[#101113] text-gray-200'>
-            <NavBar/>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
                 <div className='w-full min-h-full bg-[#1a1c1e] shadow-xl rounded-lg overflow-hidden'>
                     <Slider {...sliderSettings}>
