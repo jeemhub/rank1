@@ -11,33 +11,6 @@ export default function CategoriesPage() {
   const [categories,setCategories]=useState([])
 
     const router = useRouter()
-  // const categories = [
-  //   {
-  //     title: "Fruits",
-  //     img: "/images/fruits-category.jpg",
-  //   },
-  //   {
-  //     title: "Vegetables",
-  //     img: "/images/vegetables-category.jpg",
-  //   },
-  //   {
-  //     title: "Dairy",
-  //     img: "/images/dairy-category.jpg",
-  //   },
-  //   {
-  //     title: "Bakery",
-  //     img: "/images/bakery-category.jpg",
-  //   },
-  //   {
-  //     title: "Meat",
-  //     img: "/images/meat-category.jpg",
-  //   },
-  //   {
-  //     title: "Beverages",
-  //     img: "/images/beverages-category.jpg",
-  //   },
-  //   // Add more categories as needed
-  // ];
   const handleClickCategory=(id)=>{
     Cookies.set('category', id, { expires: 1 })
   }

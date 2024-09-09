@@ -80,37 +80,6 @@ export default function App({params}) {
   return (
     <div className='min-h-screen w-full  bg-[#101113] flex flex-col'>
         <NavBar/>
-        {/* <div className='md:px-24 px-8 mt-4 mx-w-2/4'>
-        <Input
-        label="Search"
-        isClearable
-        radius="lg"
-        classNames={{
-          label: "text-black/50 dark:text-white/90",
-          input: [
-           
-            "text-black/90 dark:text-white/90",
-            "placeholder:text-default-700/50 dark:placeholder:text-white/60",
-          ],
-          innerWrapper: "bg-transparent",
-          inputWrapper: [
-            "shadow-xl",
-            "dark:bg-default/30",
-            "backdrop-blur-xl",
-            "backdrop-saturate-200",
-            "hover:bg-default-200/70",
-            "dark:hover:bg-default/70",
-            "group-data-[focus=true]:bg-default-200/50",
-            "dark:group-data-[focus=true]:bg-default/60",
-            "!cursor-text",
-          ],
-        }}
-        placeholder="Type to search..."
-        startContent={
-          <SearchIcon className="text-black/50 mb-0.5 dark:text-white/90 text-slate-400 pointer-events-none flex-shrink-0" />
-        }
-      />
-      </div> */}
     <div className="gap-2 grid grid-cols-1 bg-[#101113]  sm:grid-cols-2 md:grid-cols-4 p-8">
       {console.log('products')}
       {console.log(products)}

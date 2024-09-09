@@ -21,28 +21,7 @@ export default function ProductDetails({params}) {
     const [loading,setLoading]=useState(true);
     const [products, setProducts] = useState([]);
     const [relatedProducts,setRelatedProduct]=useState([]);
-    // const product = {
-    //     name: "Premium Wireless Headphones",
-    //     price: 199.99,
-    //     rating: 4.5,
-    //     reviews: 128,
-    //     description: "Experience unparalleled sound quality with our Premium Wireless Headphones. Featuring advanced noise-cancellation technology and long-lasting battery life.",
-    //     features: [
-    //         "40mm dynamic drivers for deep, rich sound",
-    //         "Active Noise Cancellation for immersive listening",
-    //         "30-hour battery life",
-    //         "Comfortable over-ear design",
-    //         "Bluetooth 5.0 for seamless connectivity"
-    //     ],
-    //     specs: {
-    //         "Bluetooth Version": "5.0",
-    //         "Battery Life": "Up to 30 hours",
-    //         "Charging Time": "2 hours",
-    //         "Weight": "250g",
-    //         "Warranty": "2 years"
-    //     }
-    // };
-
+  
     const sliderSettings = {
         dots: true,
         infinite: true,

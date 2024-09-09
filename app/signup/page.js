@@ -112,14 +112,6 @@ export default function Home() {
           </div>
         )
       }
-      useEffect(()=>{
-        if (typeof window !== "undefined") {
-          // This code will only run on the client side
-          const cookiesUser = JSON.parse(Cookies.get('user'));
-          console.log('User from cookies:', cookiesUser);
-          setUser(cookiesUser);
-        }
-      },[])
   return (
    <div className='min-h-screen bg-[#101113] flex justify-center items-center flex-col'> 
     <div className='min-w-4/5 w-3/5 p-4 rounded-md flex flex-col justify-start items-center bg-white h-auto m-4 gap-4'>
