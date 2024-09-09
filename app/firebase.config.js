@@ -20,17 +20,22 @@ let storage;
 let auth;
 let analytics;
 
-if (typeof window !== 'undefined' && !getApps().length) {
-  app = initializeApp(firebaseConfig);
-  db = getFirestore(app);
-  storage = getStorage(app);
-  auth = getAuth(app);
+app = initializeApp(firebaseConfig);
+db = getFirestore(app);
+storage = getStorage(app);
+auth = getAuth(app);
+
+// if (typeof window !== 'undefined' && !getApps().length) {
+//   app = initializeApp(firebaseConfig);
+//   db = getFirestore(app);
+//   storage = getStorage(app);
+//   auth = getAuth(app);
   
-  // Only initialize analytics on the client-side
-  if (process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID) {
-    const { getAnalytics } = require("firebase/analytics");
-    analytics = getAnalytics(app);
-  }
-}
+//   // Only initialize analytics on the client-side
+//   if (process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID) {
+//     const { getAnalytics } = require("firebase/analytics");
+//     analytics = getAnalytics(app);
+//   }
+// }
 
 export { app, db, storage, auth, analytics };
