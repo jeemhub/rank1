@@ -111,9 +111,9 @@ useEffect(()=>{
     },[])
     return (<>
   
+        <NavBar/>
         {loading?
             <div className='w-full min-h-screen max-w-7xl mx-auto h-auto flex gap-4 flex-col justify-start items-center p-6 bg-[#101113] text-gray-200'>
-            <NavBar/>
             <h1 className='text-3xl text-white font-bold text-center'>Loading...</h1>
             </div>
             :
