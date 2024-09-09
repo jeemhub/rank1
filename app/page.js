@@ -6,10 +6,7 @@ import profilePic from '@/public/main-image.jpg';
 import Link from 'next/link';
 import NavBar from '../components/NavBar'
 import { useSelector, useDispatch } from 'react-redux'
-import {signIn} from './signin/userSlice'
 import { useRouter } from 'next/navigation';
-import { useEffect } from "react";
-import Cookies from 'js-cookie';
 export default function Home() {
   const userToolKit = useSelector((state) => state.user);
   const router =useRouter();
@@ -17,14 +14,6 @@ export default function Home() {
 const products=()=>{
   router.push('/categories')
 }
-useEffect(()=>{
-  if (typeof window !== "undefined") {
-    // This code will only run on the client side
-    const cookiesUser = JSON.parse(Cookies.get('user'));
-    console.log('User from cookies:', cookiesUser);
-    setUser(cookiesUser);
-  }
-},[])
   return (
     <>
         <NavBar/>
