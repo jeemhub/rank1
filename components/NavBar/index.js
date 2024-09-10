@@ -16,12 +16,15 @@ const profile=()=>{
   router.push('/profile')
 }
   const menuItems = [
-    {name:"العالمية",
-    href:'/rank'
+    {name:"الصفحة الرئيسية",
+    href:'/'
     },
     {name:"حول الشركة",
-    href:'#'
-    },
+      href:'#'
+      },
+    {name:"التصنيف",
+    href:'/rank'
+    }, 
     {name:"الفئات",
     href:'/categories'
     },
@@ -45,13 +48,13 @@ const profile=()=>{
         />
         <NavbarBrand>
 
-        <Image
+        {/* <Image
         className='rounded-full mx-4'
         src="/logo.png" // Path to the image in the public folder
         alt="logo Image"
         width={50} // Specify the width of the image
         height={50} // Specify the height of the image
-      />
+      /> */}
 
         {/* <svg onClick={() => router.push('/')} className='cursor-pointer' fill="none" height="36" viewBox="0 0 32 32" width="36">
     <path
@@ -114,9 +117,9 @@ const profile=()=>{
     }
 
 
-      <NavbarMenu className='bg-black text-white'>
+      <NavbarMenu className='bg-black text-white w-full text-center flex flex-col justify-start items-center gap-8'>
         {menuItems.map((item, index) => (
-          <NavbarMenuItem className='gap-16 pt-4' key={`${item}-${index}`}>
+          <NavbarMenuItem className='gap-20 pt-4 ' key={`${item}-${index}`}>
             <Link
               
               className="w-full text-white text-5xl"

@@ -31,21 +31,21 @@ const products=()=>{
        
 
         {/* Centered Content */}
-        <div className="absolute top-2/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-white">
-        <div className='w-full flex justify-center items-center mb-2'>
-        <Image
+        <div className="absolute top-1/4 mt-24 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-white">
+        <div className='w-full flex justify-center items-center'>
+        {/* <Image
         className='rounded-full mx-4 z-30 text-center'
         src="/logo.png" // Path to the image in the public folder
         alt="logo Image"
         width={150} // Specify the width of the image
         height={150} // Specify the height of the image
-        />
+        /> */}
         </div>
-          <h1 className="text-6xl mb-12 text-shadow-lg">تميز بلوحة مفاتيح خاصة بك</h1>
+          <h1 className="text-4xl mb-12 text-shadow-lg">ارتقِ بتجربة استخدامك مع أفضل الإكسسوارات الإلكترونية</h1>
           <div className='flex flex-col justify-center items-center gap-2'>
-          <button className="bg-[#004226] text-white rounded-full border-none py-4 px-8 cursor-pointer text-4xl hover:shadow-lg hover:shadow-[#004226] hover:-translate-y-2 transition duration-300 ease-in-out">
+          {/* <button className="bg-[#004226] text-white rounded-full border-none py-4 px-8 cursor-pointer text-4xl hover:shadow-lg hover:shadow-[#004226] hover:-translate-y-2 transition duration-300 ease-in-out">
             ابدأ التصميم
-          </button>
+          </button> */}
           <button onClick={products} className="text-[#004226] bg-white rounded-full border-none py-4 px-8 cursor-pointer text-4xl hover:shadow-lg hover:shadow-[#004226] hover:-translate-y-2 transition duration-300 ease-in-out">
             المنتجات
           </button>
@@ -53,16 +53,16 @@ const products=()=>{
         </div>
       </div>
       
-      <div className='relative w-full h-screen block md:hidden'>
+      <div className='relative w-full h-screen md:hidden flex flex-col justify-start'>
         {/* Background Image */}
         <div className='w-full flex justify-center items-center mb-2 mt-4 pt-4'>
-        <Image
+        {/* <Image
         className='rounded-full mx-4 z-30 text-center'
         src="/logo.png" // Path to the image in the public folder
         alt="logo Image"
         width={150} // Specify the width of the image
         height={150} // Specify the height of the image
-        />
+        /> */}
         </div>
         <Image
           src={profilePic}
@@ -75,12 +75,12 @@ const products=()=>{
         />
 
         {/* Mobile Centered Content */}
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-white z-20">
-          <h1 className="text-4xl mb-12 text-shadow-lg">تميز بلوحة مفاتيح خاصة بك</h1>
+        <div className="absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-white z-20  w-full">
+          <h1 className="text-4xl  mb-12 text-shadow-lg text-center w-full px-4">ارتقِ بتجربة استخدامك مع أفضل الإكسسوارات الإلكترونية</h1>
           <div className='flex flex-col justify-center items-center gap-2'>
-          <button className="bg-[#004226] text-white rounded-full border-none  py-4 px-8 cursor-pointer text-2xl hover:shadow-lg hover:shadow-[#004226] hover:-translate-y-2 transition duration-300 ease-in-out">
+          {/* <button className="bg-[#004226] text-white rounded-full border-none  py-4 px-8 cursor-pointer text-2xl hover:shadow-lg hover:shadow-[#004226] hover:-translate-y-2 transition duration-300 ease-in-out">
             ابدأ التصميم
-          </button>
+          </button> */}
           <button onClick={products} className="text-[#004226] bg-white rounded-full border-none  py-4 px-8 cursor-pointer text-2xl hover:shadow-lg hover:shadow-[#004226] hover:-translate-y-2 transition duration-300 ease-in-out">
             المنتجات
           </button>
